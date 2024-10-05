@@ -12,7 +12,7 @@ const AuthenticationSlice = createSlice({
   name: 'authentication',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<AuthenticationState>) => {
+    login: (state, { payload }: PayloadAction<AuthenticationState>) => {
       state.username = payload.username;
     }
   }
