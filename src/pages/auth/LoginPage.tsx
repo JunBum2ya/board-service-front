@@ -1,6 +1,13 @@
+import AuthTemplate from '../../components/auth/AuthTemplate';
+import AuthForm from '../../components/auth/AuthForm';
+
 const LoginPage = () => {
   return (
-    <div>로그인 페이지</div>
+    <div>
+      <AuthTemplate>
+        <AuthForm type={`LOGIN`}/>
+      </AuthTemplate>
+    </div>
   );
 };
 

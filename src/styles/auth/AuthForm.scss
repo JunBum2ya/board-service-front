@@ -1,0 +1,43 @@
+.auth-form {
+  h3 {
+    color: #343a40;
+    margin: 0 0 1rem;
+  }
+  input {
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid #adb5bd;
+    padding-bottom: 0.5rem;
+    outline: none;
+    width: 100%;
+    &:focus {
+      color: #868296;
+      border-bottom: 1px solid #495057;
+    }
+    &:not(:first-child) {
+      margin-top: 1rem;
+    }
+  }
+  .custom-button {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    width: 100%;
+    font-size: 1.125rem;
+    background: #22b8cf;
+    &:hover {
+      background: #3bc9db;
+    }
+  }
+  .auth-footer {
+    margin-top: 2rem;
+    text-align: right;
+    a {
+      color: #868296;
+      text-decoration: underline;
+      &:hover {
+        color: #212529;
+      }
+    }
+  }
+}
