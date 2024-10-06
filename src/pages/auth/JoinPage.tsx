@@ -1,10 +1,10 @@
 import AuthTemplate from '../../components/auth/AuthTemplate';
-import AuthForm from '../../components/auth/AuthForm';
+import JoinForm from '../../container/auth/JoinForm';
 
 const JoinPage = () => {
   return (
     <AuthTemplate>
-      <AuthForm type={`JOIN`}/>
+      <JoinForm/>
     </AuthTemplate>
   );
 };

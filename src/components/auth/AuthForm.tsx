@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, FormEventHandler, useCallback } from 'react';
 import '../../styles/auth/AuthForm.scss';
 import Button from '../Button';
 import { Link } from 'react-router-dom';
@@ -8,15 +8,28 @@ const typeMap = {
   JOIN: '회원가입'
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
+const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onSubmit, onChange }) => {
 
   const text = typeMap[type];
+
+  const onInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    onChange(name, value);
+  }, [onChange]);
 
   return (
     <div className={`auth-form`}>
       <h3>{text}</h3>
-      <form>
-        {type === 'JOIN' ? <JoinForm /> : <LoginForm />}
+      <form onSubmit={onSubmit}>
+        <input autoComplete={`username`} name={`username`} placeholder={`아이디`} onChange={onInputChange}
+               value={formData.username} />
+        <input autoComplete={`new-password`} name={`password`} placeholder={`비밀번호`} type={`password`}
+               onChange={onInputChange} value={formData.password} />
+        {type === 'JOIN' &&
+          <input autoComplete={`new-password`} name={`passwordConfirm`} placeholder={`비밀번호 확인`} type={`password`}
+                 onChange={onInputChange} value={formData.passwordConfirm} />
+        }
         <Button>{text}</Button>
       </form>
       <div className={`auth-footer`}>
@@ -34,25 +47,13 @@ type FormType = 'LOGIN' | 'JOIN';
 
 type AuthFormProps = {
   type: FormType;
-};
-
-const LoginForm = () => {
-  return (
-    <>
-      <input autoComplete={`username`} name={`username`} placeholder={`아이디`} />
-      <input autoComplete={`new-password`} name={`password`} placeholder={`비밀번호`} type={`password`} />
-    </>
-  );
-};
-
-const JoinForm = () => {
-  return (
-    <>
-      <input autoComplete={`username`} name={`username`} placeholder={`아이디`} />
-      <input autoComplete={`new-password`} name={`password`} placeholder={`비밀번호`} type={`password`} />
-      <input autoComplete={`new-password`} name={`passwordConfirm`} placeholder={`비밀번호 확인`} type={`password`} />
-    </>
-  );
+  formData: {
+    username: string;
+    password: string;
+    passwordConfirm?: string;
+  }
+  onSubmit: FormEventHandler<HTMLFormElement>;
+  onChange: (name: string, value: string) => void;
 };
 
 export default AuthForm;
