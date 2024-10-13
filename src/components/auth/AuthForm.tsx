@@ -27,8 +27,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onSubmit, onChange 
         <input autoComplete={`new-password`} name={`password`} placeholder={`비밀번호`} type={`password`}
                onChange={onInputChange} value={formData.password} />
         {type === 'JOIN' &&
-          <input autoComplete={`new-password`} name={`passwordConfirm`} placeholder={`비밀번호 확인`} type={`password`}
-                 onChange={onInputChange} value={formData.passwordConfirm} />
+          <>
+            <input autoComplete={`new-password`} name={`passwordConfirm`} placeholder={`비밀번호 확인`} type={`password`}
+                   onChange={onInputChange} value={formData.passwordConfirm} />
+            <input autoComplete={`email`} name={`email`} placeholder={`이메일`} type={`email`} onChange={onInputChange}
+                   value={formData.email} />
+            <input autoComplete={`nickname`} name={`nickname`} placeholder={`닉네임`} type={`text`}
+                   onChange={onInputChange} value={formData.nickname}/>
+          </>
         }
         <Button>{text}</Button>
       </form>
@@ -51,6 +57,8 @@ type AuthFormProps = {
     username: string;
     password: string;
     passwordConfirm?: string;
+    email?: string;
+    nickname?: string;
   }
   onSubmit: FormEventHandler<HTMLFormElement>;
   onChange: (name: string, value: string) => void;

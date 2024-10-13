@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import AuthenticationReducer from './features/AuthenticationReducer';
 import AuthFormReducer from './features/AuthFormReducer';
+import loading from './features/loading';
 
 const store = configureStore({
   reducer: {
     authentication: AuthenticationReducer,
-    authForm: AuthFormReducer
+    authForm: AuthFormReducer,
+    loading: loading
   }
 });
 

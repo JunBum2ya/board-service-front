@@ -5,7 +5,9 @@ export interface AuthFormState {
   join: {
     username: string,
     password: string,
-    passwordConfirm: string
+    passwordConfirm: string,
+    email: string,
+    nickname: string
   },
   login: {
     username: string,
@@ -17,7 +19,9 @@ const initialState: AuthFormState = {
   join: {
     username: '',
     password: '',
-    passwordConfirm: ''
+    passwordConfirm: '',
+    email: '',
+    nickname: ''
   },
   login: {
     username: '',
@@ -43,7 +47,7 @@ const AuthFormSlice = createSlice({
       }
     }: PayloadAction<ChangeFieldAction>) => produce(state, draft => {
       if (type === 'join') {
-        if(key === 'username' || key === 'password' || key === 'passwordConfirm') {
+        if (key === 'username' || key === 'password' || key === 'passwordConfirm' || key === 'nickname' || key === 'email') {
           draft.join[key] = value;
         }
       } else {

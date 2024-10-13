@@ -14,9 +14,7 @@ const JoinForm = () => {
   };
 
   const onChange = (name: string, value: string) => {
-    if(name === 'username' || name === 'password' || name === 'passwordConfirm') {
       dispatch(changeField({type: 'join', key: name, value: value }));
-    }
   };
 
   return (
