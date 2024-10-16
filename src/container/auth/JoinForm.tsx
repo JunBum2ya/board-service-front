@@ -1,11 +1,11 @@
 import AuthForm from '../../components/auth/AuthForm';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { FormEvent } from 'react';
-import { changeField } from '../../features/AuthFormReducer';
+import { FormEvent, useEffect } from 'react';
+import { changeField, initializeForm } from '../../features/authentication';
 
 const JoinForm = () => {
 
-  const formData = useAppSelector(state => state.authForm.join);
+  const formData = useAppSelector(state => state.authentication.form.join);
   const dispatch = useAppDispatch();
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -14,8 +14,14 @@ const JoinForm = () => {
   };
 
   const onChange = (name: string, value: string) => {
-      dispatch(changeField({type: 'join', key: name, value: value }));
+    if (name === 'username' || name === 'password' || name === 'passwordConfirm' || name === 'email' || name === 'nickname') {
+      dispatch(changeField({ form: 'join', key: name, value: value }));
+    }
   };
+
+  useEffect(() => {
+    dispatch(initializeForm('join'));
+  }, [dispatch]);
 
   return (
     <AuthForm type={`JOIN`} formData={formData} onSubmit={onSubmit} onChange={onChange} />

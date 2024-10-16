@@ -1,9 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
-import AuthenticationReducer, { authSaga } from './features/AuthenticationReducer';
-import AuthFormReducer from './features/AuthFormReducer';
+import { configureStore, Tuple } from '@reduxjs/toolkit';
 import loading from './features/loading';
 import createSagaMiddleware from 'redux-saga';
 import { all } from 'axios';
+import authentication, { authSaga } from './features/authentication';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -13,10 +12,10 @@ export function* rootSaga() {
 
 const store = configureStore({
   reducer: {
-    authentication: AuthenticationReducer,
-    authForm: AuthFormReducer,
+    authentication: authentication,
     loading: loading
-  }
+  },
+  middleware: () => new Tuple(sagaMiddleware)
 });
 
 sagaMiddleware.run(rootSaga);

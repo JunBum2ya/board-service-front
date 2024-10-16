@@ -1,18 +1,16 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { FormEvent, useEffect } from 'react';
 import AuthForm from '../../components/auth/AuthForm';
-import { changeField, initializeForm } from '../../features/AuthFormReducer';
+import { changeField, initializeForm } from '../../features/authentication';
 
 const LoginForm = () => {
-  const formData = useAppSelector(state => state.authForm.login);
+  const formData = useAppSelector(state => state.authentication.form.login);
   const dispatch = useAppDispatch();
 
   const onChange = (name: string, value: string) => {
-    dispatch(changeField({
-      type: 'login',
-      key: name,
-      value
-    }));
+    if (name === 'username' || name === 'password') {
+      dispatch(changeField({ form: 'login', key: name, value }));
+    }
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -21,7 +19,7 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
-    dispatch(initializeForm('login'))
+    dispatch(initializeForm('login'));
   }, [dispatch]);
 
   return (
