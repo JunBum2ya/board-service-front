@@ -1,7 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import AuthenticationReducer from './features/AuthenticationReducer';
+import AuthenticationReducer, { authSaga } from './features/AuthenticationReducer';
 import AuthFormReducer from './features/AuthFormReducer';
 import loading from './features/loading';
+import createSagaMiddleware from 'redux-saga';
+import { all } from 'axios';
+
+const sagaMiddleware = createSagaMiddleware();
+
+export function* rootSaga() {
+  yield all([authSaga()]);
+}
 
 const store = configureStore({
   reducer: {
@@ -10,6 +18,8 @@ const store = configureStore({
     loading: loading
   }
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

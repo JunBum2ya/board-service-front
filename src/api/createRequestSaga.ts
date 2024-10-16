@@ -1,13 +1,20 @@
 import { call, put } from 'redux-saga/effects';
 import { finishLoading, startLoading } from '../features/loading';
 import { AxiosResponse } from 'axios';
+import CommonResponse from '../types/CommonResponse';
 
 interface RequestSagaAction<T> {
   type: string,
   payload: T
 }
 
-const createRequestSaga = <T, R>(type: string, request: (payload: T) => Promise<AxiosResponse<R>>) => {
+export const createRequestActionTypes = (type: string) => {
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
+  return [type, SUCCESS, FAILURE];
+};
+
+const createRequestSaga = <T, R>(type: string, request: (payload: T) => Promise<CommonResponse<R>>) => {
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
 
