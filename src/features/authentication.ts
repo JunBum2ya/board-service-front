@@ -1,14 +1,8 @@
-import { createAction, createReducer, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import * as authApi from '../api/Authentication';
-import createRequestSaga, { createRequestActionTypes } from '../api/createRequestSaga';
-import { JoinRequest, LoginRequest } from '../types/auth/authentication';
-import { takeLatest } from 'redux-saga/effects';
-import { produce } from 'immer';
-
-const CHANGE_FIELD = `auth/CHANGE_FIELD` as const;
-const INITIALIZE_FORM = `auth/INITIALIZE_FORM` as const;
-const [JOIN, JOIN_SUCCESS, JOIN_FAILURE] = createRequestActionTypes(`auth/JOIN`);
-const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes(`auth/LOGIN`);
+import { Authentication, AuthenticationResponse, JoinRequest, LoginRequest } from '../types/auth/authentication';
+import { createApi, EndpointBuilder, fetchBaseQuery } from '@reduxjs/toolkit/query';
+import CommonResponse from '../types/CommonResponse';
 
 type AuthenticationState = {
   form: AuthFormState;
@@ -32,12 +26,6 @@ type JoinFormState = {
   passwordConfirm: string;
   email: string;
   nickname: string;
-};
-
-type Authentication = {
-  username: string;
-  accessToken: string;
-  issuedDate: string;
 };
 
 const initialState: AuthenticationState = {
@@ -64,57 +52,49 @@ type ChangeFieldAction = {
   value: string
 }
 
-export const changeField = createAction<ChangeFieldAction>(CHANGE_FIELD);
-export const initializeForm = createAction<'login' | 'join'>(INITIALIZE_FORM);
+export const join = createAsyncThunk(`authentication/JOIN`,
+  async (request: JoinRequest) => authApi.join(request));
+export const login = createAsyncThunk(`authentication/LOGIN`,
+  async (request: LoginRequest) => authApi.login(request));
 
-export const join = createAction<JoinRequest>(JOIN);
-export const joinSuccess = createAction<Authentication>(JOIN_SUCCESS);
-export const joinFailure = createAction<string>(JOIN_FAILURE);
-export const login = createAction<LoginRequest>(LOGIN);
-export const loginSuccess = createAction<Authentication>(LOGIN_SUCCESS);
-export const loginFailure = createAction<string>(LOGIN_FAILURE);
-
-const joinSaga = createRequestSaga(JOIN, authApi.join);
-const loginSaga = createRequestSaga(LOGIN, authApi.login);
-
-export function* authSaga() {
-  yield takeLatest(JOIN, joinSaga);
-  yield takeLatest(LOGIN, loginSaga);
-}
-
-const authenticationReducer = createReducer(initialState, (builder) => {
-  builder.addCase(changeField, (state, action) => produce(state, draft => {
-    const { form, key, value } = action.payload;
-    if (form === 'login') {
-      if (key === 'username' || key === 'password') {
-        draft.form.login[key] = value;
+const authenticationSlice = createSlice({
+  name: `authentication`,
+  initialState,
+  reducers: {
+    changeField: (state, action: PayloadAction<ChangeFieldAction>) => {
+      const { form, key, value } = action.payload;
+      if (form === 'login') {
+        if (key === 'username' || key === 'password') {
+          state.form.login[key] = value;
+        }
+      } else {
+        state.form.join[key] = value;
       }
-    } else {
-      draft.form.join[key] = value;
+    },
+    initializeForm: (state, action: PayloadAction<'login' | 'join'>) => {
+      if (action.payload === 'login') {
+        state.form.login = initialState.form.login;
+      } else {
+        state.form.join = initialState.form.join;
+      }
     }
-  })).addCase(initializeForm, (state, { payload }) => produce(state, draft => {
-    if (payload === 'login') {
-      draft.form.login = initialState.form.login;
-    } else {
-      draft.form.join = initialState.form.join;
-    }
-  })).addCase(joinSuccess, (state, action) => ({
-    ...state,
-    authentication: action.payload,
-    error: null
-  })).addCase(joinFailure, (state, action) => ({
-    ...state,
-    authentication: null,
-    error: action.payload
-  })).addCase(loginSuccess, (state, action) => ({
-    ...state,
-    authentication: action.payload,
-    error: null
-  })).addCase(loginFailure, (state, action) => ({
-    ...state,
-    authentication: null,
-    error: action.payload
-  }));
+  },
+  extraReducers: (builder) => {
+    builder.addCase(join.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.authentication = action.payload;
+      } else {
+        state.error = '회원가입 에러';
+      }
+    }).addCase(login.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.authentication = action.payload;
+      } else {
+        state.error = '로그인 에러';
+      }
+    });
+  }
 });
 
-export default authenticationReducer;
+export const { changeField, initializeForm } = authenticationSlice.actions;
+export default authenticationSlice.reducer;

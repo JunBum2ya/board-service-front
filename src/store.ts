@@ -1,24 +1,9 @@
-import { configureStore, Tuple } from '@reduxjs/toolkit';
-import loading from './features/loading';
-import createSagaMiddleware from 'redux-saga';
-import { all } from 'axios';
-import authentication, { authSaga } from './features/authentication';
-
-const sagaMiddleware = createSagaMiddleware();
-
-export function* rootSaga() {
-  yield all([authSaga()]);
-}
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './features';
 
 const store = configureStore({
-  reducer: {
-    authentication: authentication,
-    loading: loading
-  },
-  middleware: () => new Tuple(sagaMiddleware)
+  reducer: rootReducer
 });
-
-sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

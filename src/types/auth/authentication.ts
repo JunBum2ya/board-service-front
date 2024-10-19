@@ -13,13 +13,13 @@ export type JoinRequest = {
 export type AuthenticationResponse = {
   username: string;
   accessToken: string;
-  issuedAt: string;
+  expiresIn: string;
 };
 
 export interface Authentication {
   username: string;
   accessToken: string;
-  issuedAt: string;
+  expiresIn: string;
 }
 
 export interface AuthenticationState {
