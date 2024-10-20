@@ -1,9 +1,15 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import AuthForm from '../../components/auth/AuthForm';
 import { changeField, initializeForm, login } from '../../features/authentication';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+
   const {formData, authentication, error} = useAppSelector(state => ({
     formData: state.authentication.form.login,
     authentication: state.authentication.authentication,
@@ -28,18 +34,20 @@ const LoginForm = () => {
 
   useEffect(() => {
     if(error) {
-      console.error('회원가입 오류 발생');
-      console.error(error);
+      console.error(`로그인 오류 발생: ${error}`);
+      setLoginError('로그인 오류');
       return;
     }
+  }, [error]);
+
+  useEffect(() => {
     if(authentication) {
-      console.log('회원 가입 성공');
-      console.log(authentication);
+      navigate("/");
     }
-  }, [authentication, error]);
+  }, [authentication, navigate]);
 
   return (
-    <AuthForm formData={formData} type={`LOGIN`} onSubmit={onSubmit} onChange={onChange} />
+    <AuthForm formData={formData} type={`LOGIN`} onSubmit={onSubmit} onChange={onChange} error={loginError}/>
   );
 };
 

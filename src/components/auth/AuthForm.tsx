@@ -8,7 +8,7 @@ const typeMap = {
   JOIN: '회원가입'
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onSubmit, onChange }) => {
+const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onSubmit, onChange, error }) => {
 
   const text = typeMap[type];
 
@@ -33,9 +33,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onSubmit, onChange 
             <input autoComplete={`email`} name={`email`} placeholder={`이메일`} type={`email`} onChange={onInputChange}
                    value={formData.email} />
             <input autoComplete={`nickname`} name={`nickname`} placeholder={`닉네임`} type={`text`}
-                   onChange={onInputChange} value={formData.nickname}/>
+                   onChange={onInputChange} value={formData.nickname} />
           </>
         }
+        {error && < div className={`error-message`}>{error}</div>}
         <Button>{text}</Button>
       </form>
       <div className={`auth-footer`}>
@@ -46,7 +47,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, formData, onSubmit, onChange 
         )}
       </div>
     </div>
-  );
+  )
+    ;
 };
 
 type FormType = 'LOGIN' | 'JOIN';
@@ -62,6 +64,7 @@ type AuthFormProps = {
   }
   onSubmit: FormEventHandler<HTMLFormElement>;
   onChange: (name: string, value: string) => void;
+  error?: string | null;
 };
 
 export default AuthForm;

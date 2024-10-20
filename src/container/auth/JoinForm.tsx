@@ -1,9 +1,14 @@
 import AuthForm from '../../components/auth/AuthForm';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { changeField, initializeForm, join } from '../../features/authentication';
+import { useNavigate } from 'react-router-dom';
 
 const JoinForm = () => {
+
+  const navigate = useNavigate();
+
+  const [joinError, setJoinError] = useState<string | null>(null);
 
   const { formData, authentication, error } = useAppSelector(state => ({
     formData: state.authentication.form.join,
@@ -15,8 +20,14 @@ const JoinForm = () => {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password, passwordConfirm, email, nickname } = formData;
+    if([username, password, passwordConfirm, email].includes('')) {
+      setJoinError('빈 칸을 모두 입력해주세요.');
+      return;
+    }
     if (password !== passwordConfirm) {
-      alert('패스워드가 일치하지 않습니다.');
+      setJoinError('비밀번호가 일치하지 않습니다.');
+      dispatch(changeField({form: 'join', key: 'password', value: ''}));
+      dispatch(changeField({form: 'join', key: 'passwordConfirm', value: ''}));
       return;
     }
     dispatch(join({ username, password, email, nickname }));
@@ -34,18 +45,19 @@ const JoinForm = () => {
 
   useEffect(() => {
     if(error) {
-      console.error('회원가입 오류 발생');
-      console.error(error);
+      console.error(`회원가입 오류 발생 : ${error}`);
       return;
     }
+  }, [error]);
+
+  useEffect(() => {
     if(authentication) {
-      console.log('회원 가입 성공');
-      console.log(authentication);
+      navigate("/");
     }
-  }, [authentication, error]);
+  }, [authentication, navigate]);
 
   return (
-    <AuthForm type={`JOIN`} formData={formData} onSubmit={onSubmit} onChange={onChange} />
+    <AuthForm type={`JOIN`} formData={formData} onSubmit={onSubmit} onChange={onChange} error={joinError} />
   );
 };
 
