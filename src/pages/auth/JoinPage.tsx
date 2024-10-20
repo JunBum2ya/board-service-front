@@ -1,5 +1,12 @@
+import AuthTemplate from '../../components/auth/AuthTemplate';
+import JoinForm from '../../container/auth/JoinForm';
+
 const JoinPage = () => {
-  return (<div>회원가입 페이지</div>);
+  return (
+    <AuthTemplate>
+      <JoinForm/>
+    </AuthTemplate>
+  );
 };
 
 export default JoinPage;
