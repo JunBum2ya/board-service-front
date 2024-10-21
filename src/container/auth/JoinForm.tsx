@@ -20,14 +20,14 @@ const JoinForm = () => {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password, passwordConfirm, email, nickname } = formData;
-    if([username, password, passwordConfirm, email].includes('')) {
+    if ([username, password, passwordConfirm, email].includes('')) {
       setJoinError('빈 칸을 모두 입력해주세요.');
       return;
     }
     if (password !== passwordConfirm) {
       setJoinError('비밀번호가 일치하지 않습니다.');
-      dispatch(changeField({form: 'join', key: 'password', value: ''}));
-      dispatch(changeField({form: 'join', key: 'passwordConfirm', value: ''}));
+      dispatch(changeField({ form: 'join', key: 'password', value: '' }));
+      dispatch(changeField({ form: 'join', key: 'passwordConfirm', value: '' }));
       return;
     }
     dispatch(join({ username, password, email, nickname }));
@@ -44,15 +44,20 @@ const JoinForm = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       console.error(`회원가입 오류 발생 : ${error}`);
       return;
     }
   }, [error]);
 
   useEffect(() => {
-    if(authentication) {
-      navigate("/");
+    if (authentication) {
+      try {
+        localStorage.setItem('authentication', JSON.stringify(authentication));
+      } catch (error) {
+        console.log('localStorage is not working');
+      }
+      navigate('/');
     }
   }, [authentication, navigate]);
 

@@ -7,6 +7,20 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
+import { setAuthentication } from './features/authentication';
+
+const loadUser = () => {
+  try {
+    const authentication = localStorage.getItem('authentication');
+    if (!authentication) return;
+
+    store.dispatch(setAuthentication(JSON.parse(authentication)));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+loadUser();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
