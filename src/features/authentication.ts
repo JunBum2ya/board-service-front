@@ -77,6 +77,9 @@ const authenticationSlice = createSlice({
       } else {
         state.form.join = initialState.form.join;
       }
+    },
+    setAuthentication: (state, action: PayloadAction<Authentication>) => {
+      state.authentication = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -96,5 +99,5 @@ const authenticationSlice = createSlice({
   }
 });
 
-export const { changeField, initializeForm } = authenticationSlice.actions;
+export const { changeField, initializeForm, setAuthentication } = authenticationSlice.actions;
 export default authenticationSlice.reducer;
