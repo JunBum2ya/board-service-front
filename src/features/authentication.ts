@@ -78,7 +78,7 @@ const authenticationSlice = createSlice({
         state.form.join = initialState.form.join;
       }
     },
-    setAuthentication: (state, action: PayloadAction<Authentication>) => {
+    setAuthentication: (state, action: PayloadAction<Authentication | null>) => {
       state.authentication = action.payload;
     }
   },

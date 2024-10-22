@@ -12,9 +12,12 @@ import { setAuthentication } from './features/authentication';
 const loadUser = () => {
   try {
     const authentication = localStorage.getItem('authentication');
-    if (!authentication) return;
+    if (authentication) {
+      store.dispatch(setAuthentication(JSON.parse(authentication)));
+    }else {
+      store.dispatch(setAuthentication(null));
+    }
 
-    store.dispatch(setAuthentication(JSON.parse(authentication)));
   } catch (error) {
     console.error(error);
   }

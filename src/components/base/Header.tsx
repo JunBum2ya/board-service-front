@@ -4,18 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 import { Authentication } from '../../types/auth/authentication';
 
-const Header: React.FC<HeaderProps> = ({ authentication }) => {
-
-  const navigate = useNavigate();
-
-  const onLogout = () => {
-    try {
-      localStorage.removeItem("authentication");
-    }catch (error) {
-      console.error(error);
-    }
-    navigate("/");
-  };
+const Header: React.FC<HeaderProps> = ({ authentication, onLogout }) => {
 
   return (
     <>
@@ -43,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({ authentication }) => {
 
 type HeaderProps = {
   authentication?: Authentication | null;
+  onLogout: () => void;
 };
 
 export default Header;
