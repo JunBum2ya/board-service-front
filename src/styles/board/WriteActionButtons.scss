@@ -1,0 +1,14 @@
+.write-action-buttons-block {
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  display: flex;
+  button + button {
+    margin-left: .5rem;
+  }
+  .custom-button {
+    height: 2.125rem;
+    & + & {
+      margin-left: .5rem;
+    }
+  }
+}

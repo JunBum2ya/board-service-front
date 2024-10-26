@@ -1,0 +1,59 @@
+.tag-box-block {
+  width: 100%;
+  border-top: 1px solid #343a40;
+  padding-top: 2rem;
+
+  h4 {
+    color: #868296;
+    margin-top: 0;
+    margin-bottom: .5rem;
+  }
+
+  .tag-form {
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    width: 256px;
+    border: 1px solid #adb5bd;
+
+    input, button {
+      outline: none;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input {
+      padding: .5rem;
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  button {
+    cursor: pointer;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    border: none;
+    background-color: #868296;
+    color: #fff;
+    font-weight: bold;
+    &:hover {
+      background-color: #495057;
+    }
+  }
+
+  .tag-list {
+    display: flex;
+    margin-top: .5rem;
+
+    .tag {
+      margin-right: .5rem;
+      color: #22b8cf;
+      cursor: pointer;
+      &:hover {
+        opacity: .5;
+      }
+
+    }
+  }
+}
