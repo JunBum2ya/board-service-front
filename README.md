@@ -3,3 +3,4 @@
 1. REACT
 2. Redux toolkit 사용
 3. 에디터 구현
+4. api 연동
